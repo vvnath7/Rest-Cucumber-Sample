@@ -1,0 +1,55 @@
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+defaultTasks 'clean', 'test', 'aggregate'
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.31")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+
+ext {
+    slf4jVersion = '1.7.7'
+    junitVersion = '4.13.1'
+    assertJVersion = '3.8.0'
+    logbackVersion = '1.2.3'
+    cucumberVersion = '6.10.1'
+    restassuredVersion = '4.3.3'
+}
+
+dependencies {
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+
+    testCompile "io.cucumber:cucumber-java:${cucumberVersion}",
+            "io.cucumber:cucumber-junit:${cucumberVersion}",
+            "io.rest-assured:rest-assured:${restassuredVersion}",
+            "junit:junit:${junitVersion}",
+            "org.assertj:assertj-core:${assertJVersion}",
+            "org.hamcrest:hamcrest-all:1.3",
+            "com.fasterxml.jackson.core:jackson-databind:2.12.2"
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+gradle.startParameter.continueOnFailure = true
+
+//test.finalizedBy(aggregate)
